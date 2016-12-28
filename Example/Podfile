@@ -1,0 +1,6 @@
+use_frameworks!
+target 'IPaPlaceholderTextView_Tests' do
+  pod 'IPaPlaceholderTextView', :path => '../'
+  
+  
+end
