@@ -1,0 +1,16 @@
+PODS:
+  - IPaPlaceholderTextView (0.1.0)
+
+DEPENDENCIES:
+  - IPaPlaceholderTextView (from `../`)
+
+EXTERNAL SOURCES:
+  IPaPlaceholderTextView:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  IPaPlaceholderTextView: 3cad31b538301b5759445da1c473260908bf04d8
+
+PODFILE CHECKSUM: 0d2a909d0fba2368536e61a81b2dd9ff2466efd2
+
+COCOAPODS: 1.1.1
