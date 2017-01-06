@@ -7,11 +7,11 @@
 //
 
 import UIKit
-//@IBDesignable
+@IBDesignable
 open class IPaPlaceholderTextView: UITextView {
     
     @IBInspectable dynamic open var placeholder = ""
-    @IBInspectable dynamic var placeholderColor = UIColor.darkGray
+    @IBInspectable dynamic open var placeholderColor = UIColor.darkGray
     lazy var placeholderLabelLeftConstraint = NSLayoutConstraint()
     //    lazy var placeholderLabelRightConstraint = NSLayoutConstraint()
     lazy var placeholderLabelWidthConstraint = NSLayoutConstraint()
