@@ -1,5 +1,7 @@
 PODS:
-  - IPaPlaceholderTextView (0.1.0)
+  - IPaDesignableUI (1.0)
+  - IPaPlaceholderTextView (1.0):
+    - IPaDesignableUI
 
 DEPENDENCIES:
   - IPaPlaceholderTextView (from `../`)
@@ -9,8 +11,9 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  IPaPlaceholderTextView: 3cad31b538301b5759445da1c473260908bf04d8
+  IPaDesignableUI: 873799941c0c632e7ce6bf36f526cb192f060756
+  IPaPlaceholderTextView: 9d102fc88f4712408a4ebcd62f874214a442e48a
 
-PODFILE CHECKSUM: 0d2a909d0fba2368536e61a81b2dd9ff2466efd2
+PODFILE CHECKSUM: 74b87f5ecb919b3ddef9269df4e158b78b5a363c
 
-COCOAPODS: 1.1.1
+COCOAPODS: 1.2.1

@@ -7,59 +7,33 @@
 //
 
 import UIKit
+import IPaDesignableUI
 @IBDesignable
-open class IPaPlaceholderTextView: UITextView {
+open class IPaPlaceholderTextView: IPaDesignableTextView {
     
-    @IBInspectable dynamic open var placeholder = ""
-    @IBInspectable dynamic open var placeholderColor = UIColor.darkGray
-    lazy var placeholderLabelLeftConstraint = NSLayoutConstraint()
-    //    lazy var placeholderLabelRightConstraint = NSLayoutConstraint()
-    lazy var placeholderLabelWidthConstraint = NSLayoutConstraint()
-    lazy var placeholderLabelTopConstraint = NSLayoutConstraint()
-    lazy var placeholderLabel:UILabel = {
-        
-        var _placeholderLabel = UILabel()
-        _placeholderLabel.lineBreakMode = .byWordWrapping
-        _placeholderLabel.numberOfLines = 0
-        //_placeholderLabel.preferredMaxLayoutWidth = 200
-        _placeholderLabel.font = self.font
-        _placeholderLabel.backgroundColor = UIColor.clear
-        _placeholderLabel.textColor = self.placeholderColor
-        _placeholderLabel.text = self.placeholder
-        _placeholderLabel.translatesAutoresizingMaskIntoConstraints = false
-        self.addSubview(_placeholderLabel)
-        self.textContainer.lineFragmentPadding = 0
-        self.placeholderLabelLeftConstraint = NSLayoutConstraint(item: _placeholderLabel, attribute: .leading, relatedBy: NSLayoutRelation.equal, toItem: self, attribute: .leading, multiplier: 1, constant: self.textContainerInset.left)
-        //        self.placeholderLabelRightConstraint = NSLayoutConstraint(item: _placeholderLabel, attribute: .Trailing, relatedBy: NSLayoutRelation.Equal, toItem:self , attribute: .Trailing, multiplier: 1, constant: self.textContainerInset.right)
-        
-        self.placeholderLabelWidthConstraint = NSLayoutConstraint(item: _placeholderLabel, attribute: .width, relatedBy: .equal, toItem: self, attribute: .width, multiplier: 1, constant: -self.textContainerInset.left-self.textContainerInset.right)
-        
-        self.placeholderLabelTopConstraint = NSLayoutConstraint(item: _placeholderLabel, attribute: .top, relatedBy: NSLayoutRelation.equal, toItem:self , attribute: .top, multiplier: 1, constant: self.textContainerInset.top)
-        
-        
-        self.addConstraints([self.placeholderLabelWidthConstraint,self.placeholderLabelTopConstraint,self.placeholderLabelLeftConstraint])
-        
-        
-        
-        return _placeholderLabel
-    }()
+    @IBInspectable open var placeholder:String = ""
+        {
+        didSet {
+            self.setNeedsDisplay()
+        }
+    }
+    @IBInspectable open var placeholderColor:UIColor = UIColor.darkGray
+        {
+        didSet {
+            self.setNeedsDisplay()
+        }
+    }
     var textChangedObserver:NSObjectProtocol?
     override open func awakeFromNib() {
         super.awakeFromNib()
-        initialPlaceholderLabel()
+        addTextChangeObserver()
     }
-    func initialPlaceholderLabel () {
+    func addTextChangeObserver() {
         textChangedObserver = NotificationCenter.default.addObserver(forName: NSNotification.Name.UITextViewTextDidChange, object: self, queue: nil, using: {
             noti in
-            self.placeholderLabel.isHidden = (self.text.characters.count > 0)
-            self.updateConstraintsIfNeeded()
+            self.setNeedsDisplay()
         })
-        self.placeholderLabel.isHidden = text.characters.count > 0
-        addObserver(self, forKeyPath: "font", options: .new, context: nil)
-        addObserver(self, forKeyPath: "text", options: .new, context: nil)
-        addObserver(self, forKeyPath: "placeholder", options: .new, context: nil)
-        addObserver(self, forKeyPath: "placeholderColor", options: .new, context: nil)
-        addObserver(self, forKeyPath: "textContainerInset", options: .new, context: nil)
+      
     }
     deinit {
         if let textChangedObserver = textChangedObserver {
@@ -71,32 +45,29 @@ open class IPaPlaceholderTextView: UITextView {
         //        removeObserver(self, forKeyPath: "placeholderColor")
         //        removeObserver(self, forKeyPath: "textContainerInset")
     }
-    open override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        if let keyPath = keyPath {
-            switch (keyPath) {
-            case "font":
-                placeholderLabel.font = font
-                placeholderLabel.superview?.updateConstraintsIfNeeded()
-                
-            case "text":
-                placeholderLabel.isHidden = text.characters.count > 0
-            case "placeholder":
-                placeholderLabel.text = placeholder
-                placeholderLabel.superview?.updateConstraintsIfNeeded()
-            case "placeholderColor":
-                placeholderLabel.textColor = placeholderColor
-            case "textContainerInset":
-                self.placeholderLabelTopConstraint.constant = self.textContainerInset.top
-                self.placeholderLabelLeftConstraint.constant = self.textContainerInset.left
-                //                self.placeholderLabelRightConstraint.constant = self.textContainerInset.right
-                self.placeholderLabelWidthConstraint.constant =
-                    -self.textContainerInset.left-self.textContainerInset.right
-                placeholderLabel.superview?.updateConstraintsIfNeeded()
-            default:
-                break
-            }
+    override open func draw(_ rect: CGRect) {
+        //return if hasText
+        if self.hasText {
+            return
         }
+        
+        // attr
+        var attrs:[String:Any] = [NSForegroundColorAttributeName:self.placeholderColor]
+        if let font = self.font {
+            attrs[NSFontAttributeName] = font
+        }
+        
+        var placeHolderRect = rect
+        //draw text
+        placeHolderRect.origin.x = textContainerInset.left + textContainer.lineFragmentPadding
+        placeHolderRect.origin.y = textContainerInset.top
+        placeHolderRect.size.width = self.bounds.width  - textContainerInset.left - textContainerInset.right - textContainer.lineFragmentPadding - textContainer.lineFragmentPadding
+        placeHolderRect.size.height = self.bounds.height - textContainerInset.top - textContainerInset.bottom
+        (self.placeholder as NSString).draw(in: placeHolderRect, withAttributes: attrs)
+        
     }
-    
-    
+    override open func layoutSubviews() {
+        super.layoutSubviews()
+        self.setNeedsDisplay()
+    }
 }

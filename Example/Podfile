@@ -1,6 +1,14 @@
+source 'https://github.com/CocoaPods/Specs.git'
+source 'https://github.com/ipapamagic/IPaPods.git'
 use_frameworks!
-target 'IPaPlaceholderTextView_Tests' do
+
+target 'IPaPlaceholderTextView_Example' do
+  platform :ios, '9.3'
   pod 'IPaPlaceholderTextView', :path => '../'
-  
-  
+
+  target 'IPaPlaceholderTextView_Tests' do
+    inherit! :search_paths
+
+    
+  end
 end
