@@ -8,7 +8,7 @@
 
 import UIKit
 import IPaDesignableUI
-@IBDesignable
+//@IBDesignable
 open class IPaPlaceholderTextView: IPaDesignableTextView {
     
     @IBInspectable open var placeholder:String = ""
@@ -27,6 +27,12 @@ open class IPaPlaceholderTextView: IPaDesignableTextView {
     override open func awakeFromNib() {
         super.awakeFromNib()
         addTextChangeObserver()
+    }
+    public override init(frame: CGRect, textContainer: NSTextContainer?) {
+        super.init(frame: frame, textContainer: textContainer)
+    }
+    required public init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
     }
     func addTextChangeObserver() {
         textChangedObserver = NotificationCenter.default.addObserver(forName: NSNotification.Name.UITextViewTextDidChange, object: self, queue: nil, using: {
