@@ -58,9 +58,9 @@ open class IPaPlaceholderTextView: IPaDesignableTextView {
         }
         
         // attr
-        var attrs:[String:Any] = [NSForegroundColorAttributeName:self.placeholderColor]
+        var attrs:[NSAttributedStringKey:Any] = [NSAttributedStringKey.foregroundColor:self.placeholderColor]
         if let font = self.font {
-            attrs[NSFontAttributeName] = font
+            attrs[NSAttributedStringKey.font] = font
         }
         
         var placeHolderRect = rect
